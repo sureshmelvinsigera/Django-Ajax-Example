@@ -1,10 +1,10 @@
 from django import forms
-from apps.bookadmin.models import Book
+from apps.bookadmin.models import BookModel
 
 
-class CreateBookForm(forms.ModelForm):
+class BookModelForm(forms.ModelForm):
 	class Meta:
-		model = Book
+		model = BookModel
 		fields = ('title', 'publisher', 'author', 'price', 'pages',)
 
 		widgets = {

@@ -1,0 +1,114 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Django Ajax CRUD</h1>
+        <p class="lead">CRUD operations form basics for database operations at the backend. Conventional Django apps
+            result in a page reload after HTTP methods such as 'POST' and 'GET'.
+        </p>
+        <hr class="my-4">
+        <p>To overcome this and to implementing more immersive User experience we can use Ajax along with JQuery for
+            posting data to the server.
+        </p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addbook">
+            Add new book
+        </button>
+    </div>
+
+
+    <table class="table table-striped" id="bookdata">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Publisher</th>
+            <th scope="col">Author</th>
+            <th scope="col">Number of pages</th>
+            <th scope="col">Price</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if books %}
+            {% for book in books %}
+                <tr id="bookrow">
+                    <th scope="row">{{ book.id }} </th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.pages }}</td>
+                    <td>{{ book.price }}</td>
+                    <td><input type="button" class="edit-button btn btn-primary" id="{{ book.id }}"
+                               name="edit-button" value="edit" data-toggle="modal" data-target="#datamodel{{ book.id }}"
+                               data-id={{ book.id }}>
+                    </td>
+                    <td>
+                        <input type="button" class="delete-button btn btn-primary" id="{{ book.id }}"
+                               name="delete-button" value="delete" data-toggle="modal"
+                               data-target="#datamodel{{ book.id }}" data-id={{ book.id }}>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-primary" role="alert">
+                No data available in the table.
+            </div>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addbook" tabindex="-1" role="dialog" aria-labelledby="addbook"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Add new book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" name="create_bookfrm" id="create_bookfrm" action="{% url 'create_book_record' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ createbookform_html.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="createbookfrmbtn">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"
+        integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/book.js' %}"></script>
+</body>
+</html>
